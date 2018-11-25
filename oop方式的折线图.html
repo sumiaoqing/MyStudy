@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>oop方式来构造折线图</title>
+</head>
+<style>
+*
+{
+    padding: 0;
+    margin: 0;
+}
+canvas
+{
+    border: 1px solid black;
+}
+</style>
+<body>
+    <canvas width="600" height="400"></canvas>
+    <script>
+    var chx=document.querySelector("canvas").getContext("2d");
+    function Draw(chx)
+    {
+        this.chx=chx||document.querySelector("canvas").getContext("2d");//获取上下文
+        this.gridSize=10;//网格大小
+        this.canvasWidth=this.chx.canvas.width;
+        this.canvasHeight=this.chx.canvas.height;
+        this.space=20;//距离画布空间的大小
+        this.arrowSize=10;//箭头的大小
+        this.dotted=10;//点的大小
+    }
+    Draw.prototype.init=function(attr)
+    {
+        for(var i=0;i<attr.length;i++)
+     { 
+    chx.beginPath();
+    chx.moveTo(attr[i].x-this.dotted/2,attr[i].y-this.dotted/2);
+    chx.lineTo(attr[i].x+this.dotted/2,attr[i].y-this.dotted/2);
+    chx.lineTo(attr[i].x+this.dotted/2,attr[i].y+this.dotted/2);
+    chx.lineTo(attr[i].x-this.dotted/2,attr[i].y+this.dotted/2);
+    chx.closePath();
+    chx.fill();
+    
+    chx.beginPath();
+    chx.moveTo(this.space,this.canvasHeight-this.space);
+    chx.lineTo(attr[0].x,attr[0].y);
+    if(i<attr.length-1)
+    {
+    chx.beginPath();
+    chx.lineTo(attr[i].x,attr[i].y);
+    chx.lineTo(attr[i+1].x,attr[i+1].y)
+    }
+    chx.stroke();
+}
+    }
+    Draw.prototype.drawTable=function()
+    {
+    var xTotal=Math.floor(this.canvasHeight/this.gridSize);
+    for(var i=0;i<xTotal;i++)
+    {
+        chx.beginPath();
+        chx.moveTo(0,i*this.gridSize-0.5);
+        chx.lineTo(this.canvasWidth,i*this.gridSize-0.5);
+        chx.strokeStyle="gray";
+        chx.stroke();     
+    }
+    var yTotal=Math.floor(this.canvasWidth/this.gridSize);
+    for(var i=0;i<yTotal;i++)
+    {
+        chx.beginPath();
+        chx.moveTo(i*this.gridSize-0.5,0);
+        chx.lineTo(i*this.gridSize-0.5,this.canvasHeight);
+        chx.strokeStyle="gray";
+        chx.stroke();
+    }
+    }
+    Draw.prototype.drawAsix=function()
+    {
+    chx.moveTo(this.space,this.canvasHeight-this.space);
+    chx.lineTo(this.canvasWidth-this.space,this.canvasHeight-this.space);
+    chx.lineTo(this.canvasWidth-this.space-this.arrowSize,this.canvasHeight-this.space-this.arrowSize/2);
+    chx.lineTo(this.canvasWidth-this.space-this.arrowSize,this.canvasHeight-this.space+this.arrowSize/2);
+    chx.lineTo(this.canvasWidth-this.space,this.canvasHeight-this.space);
+    chx.fill();
+    chx.stroke();
+
+    chx.beginPath();
+    chx.moveTo(this.space,this.canvasHeight-this.space);
+    chx.lineTo(this.space,this.space);
+    chx.lineTo(this.space+this.arrowSize/2,this.space+this.arrowSize);
+    chx.lineTo(this.space-this.arrowSize/2,this.space+this.arrowSize);
+    chx.lineTo(this.space,this.space);
+    chx.fill();
+    chx.stroke();}
+
+    var coordinate=[
+        {x:100,y:100},
+        {x:200,y:200},
+        {x:267,y:367},
+        {x:134,y:356}
+    ]
+    var draw=new Draw();
+    draw.drawTable();
+    draw.drawAsix();
+    draw.init(coordinate);
+
+    </script>
+</body>
+</html>
