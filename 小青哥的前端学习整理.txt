@@ -1,0 +1,118 @@
+1.html
+浏览器内核问题:Trident(IE) Gecko(Firefox) Webkit(Safari) Blink(Chrome)
+
+2.css
+1)链接伪类选择器
+{
+    :link 未访问的链接
+    :visited 已访问的链接
+    :hover 鼠标移动链接出现的效果
+    :active 选定的链接
+}
+
+2)三大特性：层叠 继承 优先级
+层叠:指多种css样式的叠加 按照css书写的顺序，以最后的样式为准
+继承:子标签继承父标签的某些样式,如文本颜色字号
+优先级：涉及到权重问题,且权重可以叠加(!important)
+
+3)盒子模型
+盒子的宽度:padding-left+border-left+width+padding+right+border-right
+
+4)嵌套块元素的垂直外边距的合并
+解决方法：为父元素定义1px的上边框或者内边距
+         可以为元素增加overflow:hidden
+
+5)浮动问题 
+不占位置 会影响标准流 float(left,right,none)
+浮动里面子元素的宽度不会超过父元素的宽度
+父盒子里的子元素要想对齐，必须所有元素都设置浮动
+清除浮动的解决方法(为了解决父元素因为子集元素引起的内部高度为0的问题)
+
+6)定位
+static:自动定位
+relative:相对定位 可以通过偏移量来移动位置,原来的位置继续占有
+absolute:绝对定位 不占有位置,若所有父元素没有定位,那么以浏览器当前的屏幕为准
+         如果父元素没有定位，则将元素以最近的已经定位的父元素定位(绝对,固定,相对)
+fixed:固定定位 固定定位的元素和父级元素没有任何关系,其完全托标,不占有位置,不随滚动条移动
+
+7)css精灵技术(css 雪碧)
+将一张页面涉及到的所有零星图标集中到一张图上,然后将大图应用网页背景,移动位置,使图标与所要显示区域对齐
+目的:为了减少页面向服务器的请求次数,提高用户体验
+
+3.javascript基础
+1)类型转换
+转整数:parseInt() 转小数:parseFloat() 转数字:Number() 转字符串:toString()
+
+2)隐式转换
+let str1="10";
+let str2=5;
+console.log(str1+str2);//15,浏览器会自动将这种转换为number类型计算
+let str1="100kk";
+let str2="5;
+console.log(str1+str2);//100kk5,如果是这种则会直接相加，其他操作则返回NaN
+
+3)一元运算符和while循坏
+a++:先进行计算，后添加1;
+++a:先添加1，后进行计算;
+while(循环条件){循环体}:先进行条件的判断,然后执行循环体
+do{循环体}while(循环条件):先执行循坏体,然后判断条件
+
+4)函数的自调用，也称立即执行函数
+(function(){})(); 或者(function(){}();)
+
+5)隐式全局变量
+a=10;声明的变量没有var 
+全局变量不可以被删除,隐式全局变量可以
+
+6)作用域链
+使用的变量应该从自己的作用域查找，然后向上到父级中查找，最后到window
+
+7)预解析(使用let来定义变量时被废弃)
+在解析代码之前，把变量的声明提前，函数声明也提前(在其作用域内),赋值操作不提前
+
+8)oop方式创建对象的三种
+调用系统的构造函数:
+var obj=new Object();
+{
+obj.name="小苏";
+obj.play=function(){xxx};
+}
+工厂模式创建对象:
+function createObj(name,age)
+{
+    obj.name=name;
+    obj.age=age;
+    return obj;
+}
+var per=createObj("苏",18);
+per.name;//苏
+自定义构造函数创建对象:
+function Person(name,age)
+{
+    this.name=name;
+    this.age=age;
+    this.saihi=function(){xxx};
+}
+var per=new Person("苏",18);
+per.name;//苏
+
+9)json格式的数据的遍历
+遍历对象不能用for循坏,而是用for-in循坏
+let json={
+    name:"苏",
+    age:18
+}
+for(var key in json)
+{                                                                                                                          
+    console.log(json[key]);//name,age
+}
+
+10)数据类型
+基本数据类型:number string boolean undefined null
+复杂数据类型:object
+值类型之间传递的是值,而引用类型传递的是地址
+
+11)js学习中的对象
+内置对象:Math Date String Object Array(详解翻阅js权威指南)
+
+
