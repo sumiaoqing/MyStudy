@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自定义视频播放器</title>
+</head>
+<style>
+      .player
+      {
+          height: 50px;
+          width: 800px;
+          background-color: pink;
+          position:absolute;
+          bottom: 0;
+          left: 0;
+      }
+      .time
+      {
+          width: 20%;
+          height: 50px;
+          background-color: yellow;
+          position: relative;
+          left: 560px;
+      }
+      .currentTime
+      {
+          width: 50%;
+          position: relative;
+          height: 50px;
+          line-height: 50px;
+          left: 8px;
+          background-color:blue;
+          padding-left: 3px;
+          padding-right: 3px;
+      }
+      .totalTime
+      {
+          width: 50%;
+          position: relative;
+          height: 50px;
+          line-height: 50px;
+          left: 8px;
+          background-color:blue;
+          padding-left: 3px;
+          padding-right: 3px;
+      }
+      .start_end
+      {
+          display: block;
+          position: absolute;
+          text-decoration: none;
+          left: 15px;
+          top: 16px;
+      }
+      .expand
+      {
+          display: block;
+          position: absolute;
+          text-decoration: none;
+          right: 21px;
+          top: 16px;
+      }
+      .progress
+      {
+          width: 60%;
+          height: 25px;
+          background-color: purple;
+          position: absolute;
+          right: 250px;
+          top: 13px;
+      }
+      .bar
+      {
+          width: 100%;
+          height: 25px;
+          position: absolute;
+          left: 0px;
+          top: 0px;
+          z-index: 999;
+          opacity: 0;
+      }
+      .loaded
+      {
+          width: 0%;
+          height: 25px;
+          background-color: purple;
+          position: absolute;
+          left: 0;
+          top: 0;
+          background-color:red;
+      }
+      .elapse
+      {
+          width: 0%;
+          height: 25px;
+          background-color: purple;
+          position: absolute;
+          left: 0;
+          top: 0;
+          background-color:black;
+      }
+      .all_player
+      {
+        height: 410px;
+          width: 800px;
+          background-color:chartreuse;
+          position:absolute;
+          top: 100px;
+          left: 300px;  
+      }
+      video
+      {
+          width: 80%;
+          display: none;
+      }
+</style>
+
+<body>
+    <nav class="all_player">
+        <video src="01.mp4"></video>
+    <nav class="player">
+        <aside class="controls">
+   <a href="javascript:;" class="start_end">播放</a>
+   <a href="javascript:;" class="expand">全屏</a>
+        </aside>
+        <main class="progress">
+            <div class="bar"></div>
+            <div class="loaded"></div>
+            <div class="elapse"></div>
+        </main>
+        <div class="time">
+            <span class="currentTime">00:00:00</span>
+            <span class="totalTime">00:00:00</span>
+        </div>
+        <aside></aside>
+    </nav>
+    </nav>
+    <script src="js/jquery-3.1.1.min.js"></script>
+
+    <script>
+    //主要是通过jquery来实现功能
+    $(function()
+    {
+        var video=$("video")[0];
+        $(".start_end").click(function()//暂停播放
+        {
+           if(video.paused)
+           {
+               video.play();
+               $(".start_end").text("暂停");
+               getRange();
+           }
+           else
+           {
+               video.pause();
+               $(".start_end").text("播放");
+           }
+        })
+        $(".expand").click(function()//浏览器兼容问题（全屏）
+        {
+             if(video.requestFullscreen)
+             {
+                 video.requestFullscreen();
+             }else if(video.webkitRequestFullscreen)
+             {
+                 video.webkitRequestFullscreen();}
+                 else if(video.mozRequestFullscreen)
+                 {                   
+                        video.mozRequestFullscreen();
+                 }
+            })
+            video.oncanplay=function()//事件在用户可以播放视频时触发
+            {
+                $("video").css("display","block");
+                var total=video.duration;//获取视频的总时长，以秒为单位
+                var total_h=Math.floor(total/60/60);
+                var total_m=Math.floor(total%3600/60);
+                var total_s=Math.floor(total%3600%60);
+                total_h=total_h>9?total_h:"0"+total_h;
+                total_m=total_m>9?total_m:"0"+total_m;
+                total_s=total_s>9?total_s:"0"+total_s;
+                $(".totalTime").html(total_h+":"+total_m+":"+total_s);      
+            }
+            video.ontimeupdate=function()//通过该事件来报告当前的播放进度
+            {
+                var current=video.currentTime;
+                //console.log(current);
+                var current_h=Math.floor(current/60/60);
+                var current_m=Math.floor(current%3600/60);
+                var current_s=Math.floor(current%3600%60);
+                current_h=current_h>9?current_h:"0"+current_h;
+                current_m=current_m>9?current_m:"0"+current_m;
+                current_s=current_s>9?current_s:"0"+current_s;
+                $(".currentTime").html(current_h+":"+current_m+":"+current_s); 
+                var total=video.duration;
+                var elapseTime=current/total;
+                $(".elapse").css("width",elapseTime*100+"%");
+            }
+            $(".bar").click(function(e)
+            {
+                  var x=e.offsetX;//点击的偏移值
+                  x_precent=x/$(".bar").width();
+                  video.currentTime=video.duration*x_precent;
+            })
+            video.onended=function()
+            {
+                video.currentTime=0;
+                $(".start_end").text("播放");
+                $(".loaded").css("width",0);
+            }
+            function getRange()
+            {	
+			var timeRanges=video.buffered;	
+			var lastTime=timeRanges.end(timeRanges.length-1);
+			var total=video.duration;
+			var percent=(lastTime/total*100).toFixed(2);
+			$(".loaded").css("width",percent+"%");
+    }})
+
+    </script>
+</body>
+</html>
