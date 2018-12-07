@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="text">
+    <input type="button" id="hah">
+    <script>
+      //什么是防抖，一般我们在 input 输入框中输出值，并且向服务端查询数据的时候，
+      //如果每次 input 值发生改变，都向服务器发请求的话，难免会资源浪费，
+      //并且用户体验并不好，那么我们可以在 input 输入值后延迟一段时间，再发请求。就是 防抖
+      const text = document.getElementById('text');
+      text.oninput = debounce(search, 500);//当用户尝试向input输入框输入时触发事件
+
+      function search() {
+        console.log(`发起请求`);
+      }
+
+      function debounce(fn, delay) {
+        let timer=null;
+        let args=arguments;
+         return function () {
+          if (timer) 
+          {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+            fn.apply(this,args);
+          }, delay)
+            }else
+            {
+            timer = setTimeout(() => {
+            fn.apply(this,args);
+          }, delay)
+            }
+        }       
+      }
+
+//节流是会说预先设定一个执行周期，当调用动作的时刻大于等于执行周期则执行该动作，然后进入下一个新周期。
+              function throttle(fn,wait){  //fn是要进行节流的函数，wait是等待时间
+                    var lastTime = 0;
+                   return function(){
+                var nowTime = new Date().getTime();    //获取当前时间
+                if(nowTime - lastTime> wait){
+                  fn.apply(this,arguments);
+                    lastTime = nowTime;      //更新最后时间
+                }
+            }
+        }
+   document.getElementById("hah").onclick=throttle(search,6000);
+  </script>
+  </body>
+</html>
