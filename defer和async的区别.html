@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>script标签的async和defer</title>
+</head>
+<body>
+    <script>
+    //事件DomContentLoaded和load的区别
+    //onload事件触发，页面上所有dom，样式表，脚本，图片，flash都已经加载完成
+    //DOMContentLoaded事件触发时，仅当dom加载完成，不包括样式表，图片，flash
+    //DOM文档加载的步骤为
+    //1)解析htnl
+    //2)加载外部脚本script和样式表css
+    //3)解析并执行外部脚本
+    //4)dom树构建完成 DOMContentLoaded
+    //5)加载图片等外部文件
+    //6)页面加载完毕 load
+
+
+    //普通script，文档解析过程，如果遇到script脚本就会停止页面的解析进行下载，只有等script脚本全部下载完才进行脚本解析，脚本解析完才继续解析页面
+    //解析html->script1(下载完挂起等待)->script2(下载)->script2(解析)->script1(解析)->继续解析页面
+
+
+    //defer,文档解析时，遇到了设置defer的脚本，就会后台进行下载，但是不会阻止页面渲染，等所有具有defer的脚本下载完毕后，依次解析，执行完毕触发DOMContentLoad事件
+    //解析html->script1(异步下载，后台下载)->script2(异步下载，后台下载)->script2(解析)->script1(解析)->解析页面
+     
+
+    //async,会在加载后直接解析(此时页面解析停止)
+
+    //具体参考:https://www.cnblogs.com/jiasm/p/7683930.html
+
+    </script>
+</body>
+</html>
