@@ -1,0 +1,37 @@
+<!--index.wxml-->
+<!-- 引入模板文件 -->
+<import src="./temp.wxml"/>
+<view class="container">
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+  <view class="usermotto">
+    <text class="user-motto">{{motto}}</text>
+    <!-- 数据绑定 -->
+    <text>{{xqg}}</text>
+    <!-- 三元运算 -->
+    <text>{{motto=="H"?"true":"false"}}</text>
+    <!-- 数据判断 -->
+    <view wx:if="{{number>3}}">111</view>
+    <view wx:else="{{number<=3}}">222</view>
+    <!-- for循环 -->
+    <!-- <view wx:for="{{arrList}}">
+    {{index}}:{{item.hi}}
+    </view> -->
+  <!-- 绑定key -->
+  <switch wx:for="{{numberArray}}" wx:key="*this" > {{item}} </switch>
+
+<!-- 使用模板 -->
+<template is="temp01" data="{{...temp}}"/>
+<!-- 按条件渲染模板 -->
+<template is="{{1<3?'temp01':'temp02'}}" data="{{...temp}}"/>
+<!-- 动态绑定颜色 -->
+<view style="color:{{color}}">红色</view>
+<!-- 模块 -->
+<view>{{test}}</view>
+  </view>
+</view>

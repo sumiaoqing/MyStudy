@@ -1,0 +1,11 @@
+<template name="temp01">
+  <view>
+    <text> {{index}}: {{msg}} </text>
+  </view>
+</template>
+
+<template name="temp02">
+  <view>
+    <text> {{index}}: {{msg}} </text>
+  </view>
+</template>
